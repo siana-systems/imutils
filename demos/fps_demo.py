@@ -10,7 +10,7 @@
 from __future__ import print_function
 from imutils.video import VideoStream
 from imutils.video import FPS
-from imutils.video import ImageOutput
+from imutils.display import DisplayStream
 import argparse
 import imutils
 import cv2
@@ -26,7 +26,7 @@ ap.add_argument('-n', "--noscreen", help="Enables HTTP output", action="store_fa
 
 args = vars(ap.parse_args())
 
-out = ImageOutput(screen=args['noscreen'])
+out = DisplayStream(screen=args['noscreen'])
 
 # grab a pointer to the video stream and initialize the FPS counter
 print("[INFO] sampling frames from webcam...")

@@ -4,29 +4,34 @@
 # USAGE
 # from the demos folder:
 # python demos/webcam_demo.py
-# python demos/webcam_demo.py --screen
+# python demos/webcam_demo.py --web
 
 from __future__ import print_function
+
 from imutils.video import VideoStream
-from imutils.video import FPS
-from imutils.video import ImageOutput
+from imutils.display import DisplayStream
+
 import argparse
 import imutils
-import cv2
 import time
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument('-s', "--screen", help="Enables screen output", action="store_false")
+ap.add_argument('-w', "--web", help="Enables web output", action="store_false")
 
 args = ap.parse_args()
 
-stream = cv2.VideoCapture(0)
-out = ImageOutput(screen=args.screen)
+camera = VideoStream().start()
+display = DisplayStream(screen=args.web)
+
+if args.web == False:
+    print(">> output => http://localhost:8080")
 
 while True:
-    (_, frame) = stream.read()
+    frame = camera.read()
     frame = imutils.resize(frame, width=400)
     
-    out.stream("Frame", frame)
-    out.waitForKey(1)
+    display.stream("Frame", frame)
+    display.waitForKey(1)
+
+    time.sleep(1/60)

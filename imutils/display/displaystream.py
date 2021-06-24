@@ -1,7 +1,10 @@
-from imutils.display.weboutput import WebOutput
-from imutils.display.screenoutput import ScreenOutput
+# author:    SIANA Systems
+# website:   https://www.siana-systems.com
 
-class ImageOutput:
+from .weboutput import WebOutput
+from .screenoutput import ScreenOutput
+
+class DisplayStream:
     
     def __init__(self, screen: bool = True, web_port: int = 8080):
         """Creates a frame-streamer instance.

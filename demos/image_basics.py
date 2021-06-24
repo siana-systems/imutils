@@ -10,13 +10,13 @@ import matplotlib.pyplot as plt
 import imutils
 import argparse
 import cv2
-from imutils.video import ImageOutput 
+from imutils.display import DisplayStream 
 
 ap = argparse.ArgumentParser()
 ap.add_argument('-n', "--noscreen", help="Enables HTTP output", action="store_false", default=True)
 args = vars(ap.parse_args())
 
-out = ImageOutput(screen=args['noscreen'])
+out = DisplayStream(screen=args['noscreen'])
 
 # load the example images
 bridge = cv2.imread("../demo_images/bridge.jpg")

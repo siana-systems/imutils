@@ -10,13 +10,13 @@ from imutils import perspective
 import numpy as np
 import cv2
 import argparse
-from imutils.video import ImageOutput 
+from imutils.display import DisplayStream 
 
 ap = argparse.ArgumentParser()
 ap.add_argument('-n', "--noscreen", help="Enables HTTP output", action="store_false", default=True)
 args = vars(ap.parse_args())
 
-out = ImageOutput(screen=args['noscreen'])
+out = DisplayStream(screen=args['noscreen'])
 
 # load the notecard code image, clone it, and initialize the 4 points
 # that correspond to the 4 corners of the notecard
