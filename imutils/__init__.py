@@ -1,8 +1,13 @@
+##
+# author: SIANA
+# date: 07/21
+#
+#--: ORIGINAL :------------------------------------------------------
 # author:	Adrian Rosebrock
 # website:	http://www.pyimagesearch.com
 
-# set the version number
-__version__ = "0.5.4"
+# set the SIANA version number
+__version__ = "0.2.0"   # based on PyImageSearch 0.5.4
 
 # import the necessary packages
 from .convenience import translate
