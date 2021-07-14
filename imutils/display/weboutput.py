@@ -3,6 +3,7 @@
 
 from socketserver import ThreadingMixIn
 from queue import Queue
+from collections import deque
 from threading import Thread
 from http import HTTPStatus
 from http.server import (
@@ -10,6 +11,8 @@ from http.server import (
     HTTPServer
 )
 import numpy, cv2, time, urllib
+
+from PIL import Image
 
 class CameraHandler(BaseHTTPRequestHandler):
     """Handles HTTP requests from the clients. For this particular case,
@@ -43,25 +46,37 @@ class CameraHandler(BaseHTTPRequestHandler):
         if decoded_path[1:] in CameraHandler.stream_queue:
             # Start mjpg stream
             self.send_response(200)
-            self.send_header('Content-type', 'multipart/x-mixed-replace; boundary=--jpgboundary')
+
+            # http header...
+            self.send_header('Age', 0)
+            self.send_header('Cache-Control', 'no-cache, private')
+            self.send_header('Pragma', 'no-cache')
+            self.send_header('Content-type', 'multipart/x-mixed-replace; boundary=frame')
             self.end_headers()
             
+            # init blank image (first frame)
             previous_image = numpy.zeros((640, 480, 3), numpy.uint8)
             
             # stream frames...
             while True:
                 try:
-                    dequeued_image = CameraHandler.stream_queue[decoded_path[1:]].get_nowait()
+                    dequeued_image = CameraHandler.stream_queue[decoded_path[1:]].get(timeout=1000)
                 except:
                     dequeued_image = previous_image
 
                 try:
-                    _, jpg = cv2.imencode('.jpg', dequeued_image)
-                    self.wfile.write("--jpgboundary".encode("utf-8"))
+                    # convert cv2 image to jpeg
+                    _, jpg = cv2.imencode('.JPG', dequeued_image)
+
+                    # send frame http header...
+                    self.wfile.write("--frame\r\n".encode("utf-8"))
                     self.send_header('Content-type', 'image/jpeg')
                     self.send_header('Content-length', str(jpg.size))
                     self.end_headers()
+                    # send frame jpeg data...
                     self.wfile.write(jpg.tostring())
+                    self.wfile.write(b'\r\n')
+
                 except (BrokenPipeError, ConnectionResetError):
                     # client closed connection => nothing to do!
                     pass
@@ -112,10 +127,11 @@ class CameraHandler(BaseHTTPRequestHandler):
         if name not in CameraHandler.stream_queue:
             CameraHandler.stream_queue[name] = Queue()
 
-        if(CameraHandler.stream_queue[name].qsize() > 5):
-            CameraHandler.stream_queue[name].get_nowait()
+        # dump old frames...
+        while CameraHandler.stream_queue[name].qsize() > 3:
+            CameraHandler.stream_queue[name].get()
 
-        CameraHandler.stream_queue[name].put_nowait(image)
+        CameraHandler.stream_queue[name].put(image)
 
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
 	"""ThreadedHTTPServer integrates the Threading mixin, meaning
