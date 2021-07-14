@@ -12,7 +12,7 @@ import argparse
 import cv2
 import os
 from imutils import adjust_brightness_contrast
-from imutils.video import ImageOutput 
+from imutils.display import DisplayStream 
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -35,7 +35,7 @@ if os.path.isfile(file_name) is False:
 image = cv2.imread(file_name)
 adjusted = adjust_brightness_contrast(image, contrast=contrast, brightness=brightness)
 
-_out = ImageOutput(screen=args['noscreen'])
+_out = DisplayStream(screen=args['noscreen'])
 
 _out.show('Original', image)
 _out.show('Adjusted', adjusted)

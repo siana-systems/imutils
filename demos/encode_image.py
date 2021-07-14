@@ -9,7 +9,7 @@ from __future__ import print_function
 from imutils import encodings
 import argparse
 import cv2
-from imutils.video import ImageOutput 
+from imutils.display import DisplayStream 
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -18,7 +18,7 @@ ap.add_argument('-n', "--noscreen", help="Enables HTTP output", action="store_fa
 
 args = ap.parse_args()
 
-_out = ImageOutput(screen=args.noscreen)
+_out = DisplayStream(screen=args.noscreen)
 
 # load the input image
 image = cv2.imread(args.image)

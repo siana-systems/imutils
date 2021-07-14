@@ -8,7 +8,7 @@
 import argparse
 import cv2
 import imutils.text
-from imutils.video import ImageOutput 
+from imutils.display import DisplayStream 
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -46,7 +46,7 @@ else:
 
 # display resulting image with text
 
-out = ImageOutput(screen=args['noscreen'])
+display = DisplayStream(screen=args['noscreen'])
 
-out.show('Image with Text', image)
-out.waitForKey()
+display.show('Image with Text', image)
+display.waitForKey()
