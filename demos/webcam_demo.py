@@ -17,15 +17,15 @@ import time
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument('-w', "--web", help="Enables web output", action="store_false")
+ap.add_argument('-w', "--web", help="Enables web output", action="store_true")
 
 args = ap.parse_args()
 
 camera = VideoStream().start()
-display = DisplayStream(screen=args.web)
+display = DisplayStream(screen=args.web, port=8081)
 
 if args.web == False:
-    print(">> output => http://localhost:8080")
+    print(">> output => http://localhost:8081")
 
 while True:
     frame = camera.read()

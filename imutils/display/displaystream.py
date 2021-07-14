@@ -6,14 +6,14 @@ from .screenoutput import ScreenOutput
 
 class DisplayStream:
     
-    def __init__(self, screen: bool = True, web_port: int = 8080):
+    def __init__(self, screen: bool = True, port: int = 8080):
         """Creates a frame-streamer instance.
         
         Args:
             screen (bool): true = gstreamer (default), false = web/http on localhost
-            web_port (int): web port, default = 8080
+            port (int): http server port, default = 8080
         """
-        self._display = WebOutput(port=web_port) if not screen else ScreenOutput()
+        self._display = WebOutput(port=port) if not screen else ScreenOutput()
 
     def show(self, name, frame):
         """Displays an image on the display

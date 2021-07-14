@@ -55,12 +55,16 @@ class CameraHandler(BaseHTTPRequestHandler):
                 except:
                     dequeued_image = previous_image
 
-                _, jpg = cv2.imencode('.jpg', dequeued_image)
-                self.wfile.write("--jpgboundary".encode("utf-8"))
-                self.send_header('Content-type', 'image/jpeg')
-                self.send_header('Content-length', str(jpg.size))
-                self.end_headers()
-                self.wfile.write(jpg.tostring())
+                try:
+                    _, jpg = cv2.imencode('.jpg', dequeued_image)
+                    self.wfile.write("--jpgboundary".encode("utf-8"))
+                    self.send_header('Content-type', 'image/jpeg')
+                    self.send_header('Content-length', str(jpg.size))
+                    self.end_headers()
+                    self.wfile.write(jpg.tostring())
+                except (BrokenPipeError, ConnectionResetError):
+                    # client closed connection => nothing to do!
+                    pass
 
                 previous_image = dequeued_image
 

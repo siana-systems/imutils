@@ -1,3 +1,13 @@
+##
+# @note: DEPRECATED => please use:
+#
+#   from imutils.display import DisplayStream
+# 
+#   display = DisplayStream(screen=args.web, port=8081)
+#   ...
+#   display.stream("Test", frame) 
+# 
+
 from imutils.display.weboutput import WebOutput
 from imutils.display.screenoutput import ScreenOutput
 
