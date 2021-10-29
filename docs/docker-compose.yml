@@ -1,0 +1,7 @@
+version: "3.9"
+services:
+  sphinx:
+    build: .
+    volumes:
+        - ..:/src
+    command: bash -c "cd docs && ln -s index.rst contents.rst && make html && rm contents.rst"
